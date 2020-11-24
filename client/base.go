@@ -12,3 +12,8 @@ type BaseResponse struct {
 	ErrCode string `url:"ErrCode"`
 	ErrInfo string `url:"ErrInfo"`
 }
+
+// IsSuccess checks the request is success or not.
+func (r BaseResponse) IsSuccess() bool {
+	return r.ErrCode == "" && r.ErrInfo == ""
+}
