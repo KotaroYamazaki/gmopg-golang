@@ -5,6 +5,8 @@ type BaseRequest struct {
 	Version  string `url:"Version,omitempty" json:"-"`
 	ShopID   string `url:"ShopID,omitempty" json:"-"`
 	ShopPass string `url:"ShopPass,omitempty" json:"-"`
+	SiteID   string `url:"SiteID,omitempty" json:"-"`
+	SitePass string `url:"SitePass,omitempty" json:"-"`
 }
 
 // BaseResponse is base struct for api response.

@@ -13,18 +13,24 @@ const (
 // Mode stands for development mode or live mode.
 type Mode int
 
+// Config is struct for base setting for GMO Payment Gateway API.
 type Config struct {
 	Mode     `url:"-"`
 	Version  string `url:"Version,omitempty"`
 	ShopID   string `url:"ShopID"`
 	ShopPass string `url:"ShopPass"`
+	SiteID   string `url:"SiteID"`
+	SitePass string `url:"SitePass"`
 }
 
-func New(id, pass string) (*Config, error) {
+// New returns initialized *Config
+func New(shopID, shopPass, siteID, sitePass string) (*Config, error) {
 	c := &Config{
 		Mode:     modeSandbox,
-		ShopID:   id,
-		ShopPass: pass,
+		ShopID:   shopID,
+		ShopPass: shopPass,
+		SiteID:   siteID,
+		SitePass: sitePass,
 	}
 	return c, c.Validate()
 }
@@ -44,6 +50,20 @@ func (c Config) Validate() error {
 		errList = append(errList, "[ShopPass] is mandatory")
 	case len(c.ShopPass) != 8:
 		errList = append(errList, "[ShopPass] must be 8 length char")
+	}
+
+	switch {
+	case c.SiteID == "":
+		errList = append(errList, "[SiteID] is mandatory")
+	case len(c.SiteID) != 13:
+		errList = append(errList, "[SiteID] must be 8 length char")
+	}
+
+	switch {
+	case c.SitePass == "":
+		errList = append(errList, "[SitePass] is mandatory")
+	case len(c.SitePass) != 8:
+		errList = append(errList, "[SitePass] must be 8 length char")
 	}
 
 	if len(errList) == 0 {

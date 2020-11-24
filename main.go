@@ -21,10 +21,12 @@ func init() {
 func getClient() client.Client {
 	shopID := os.Getenv("GMO_PG_SHOP_ID")
 	shopPass := os.Getenv("GMO_PG_SHOP_PASS")
+	siteID := os.Getenv("GMO_PG_SITE_ID")
+	sitePass := os.Getenv("GMO_PG_SITE_PASS")
 	isProdMode := os.Getenv("GMO_PG_PRODUCTION_MODE") != ""
 	useDebugOption := os.Getenv("GMO_PG_DEBUG_OPTION") != ""
 
-	conf, err := config.New(shopID, shopPass)
+	conf, err := config.New(shopID, shopPass, siteID, sitePass)
 	if err != nil {
 		panic(err)
 	}
@@ -42,20 +44,33 @@ func getClient() client.Client {
 func main() {
 	cli := getClient()
 
-	// orderID 001_abcdefg のテスト
-	entryAPI := card.EntryTranCard{
-		OrderID: "001-abcdefg",
-		JobCd:   "AUTH",
-		Amount:  2000,
+	saveMemberAPI := card.SaveMember{
+		MemberID: "2ade",
 	}
-
-	// 実行
-	entryResp, err := entryAPI.Do(cli)
+	saveMemberResp, err := saveMemberAPI.Do(cli)
 	switch {
 	case err != nil:
 		panic(err)
-	case !entryResp.IsSuccess():
+	case !saveMemberResp.IsSuccess():
 		// error process...
 		return
 	}
+	print(saveMemberResp)
+
+	// // orderID 001_abcdefg のテスト
+	// entryAPI := card.EntryTran{
+	// 	OrderID: "001-abcdefg",
+	// 	JobCd:   "AUTH",
+	// 	Amount:  2000,
+	// }
+
+	// // 実行
+	// entryResp, err := entryAPI.Do(cli)
+	// switch {
+	// case err != nil:
+	// 	panic(err)
+	// case !entryResp.IsSuccess():
+	// 	// error process...
+	// 	return
+	// }
 }
